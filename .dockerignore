@@ -1,0 +1,17 @@
+# node
+wwwapp/node_modules
+wwwapp/npm-debug.log
+wwwapp/.cache
+
+# dotnet
+bin\
+obj\
+
+# dev stuff
+*.db
+.git
+.vscode
+.idea
+.dockerignore
+Dockerfile
+README.md
