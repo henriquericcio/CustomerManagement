@@ -1,9 +1,10 @@
-using CustomerManagement.Model;
+using CustomerManagement.Application.Contracts.Dto;
 
-namespace CustomerManagement.Controllers
+namespace CustomerManagement.Application.Contracts
 {
     public interface IUserFacade
     {
-        User GetByEmail(string sessionEmail);
+        UserDto GetByEmail(string sessionEmail);
+        UserDto GetByEmailPassword(string email, string password);
     }
 }

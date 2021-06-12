@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CustomerManagement.Model;
+using CustomerManagement.Application.Contracts.Dto;
 
-namespace CustomerManagement.Application
+namespace CustomerManagement.Application.Contracts
 {
     public interface ICustomerFacade
     {
-        Task<IEnumerable<dynamic>> Get(
+        Task<IEnumerable<CustomersDto>> Get(
             string name,
             Gender? gender,
             Guid? city,

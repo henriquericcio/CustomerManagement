@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CustomerManagement.Application.Contracts;
+using CustomerManagement.Application.Contracts.Dto;
 using CustomerManagement.Infrastructure;
 using CustomerManagement.Model;
-using Microsoft.EntityFrameworkCore;
 
-namespace CustomerManagement.Application.Contracts
+namespace CustomerManagement.Application
 {
     public class SellerFacade : ISellerFacade
     {
@@ -16,13 +17,13 @@ namespace CustomerManagement.Application.Contracts
             _context = context;
         }
 
-        public async Task<IEnumerable<dynamic>> Get()
+        public async Task<IEnumerable<SellerDto>> Get()
         {
             return  _context.Users
                 .Where(u=> u.Role == Role.Seller)
-                .Select(u => new {
-                    u.Id,
-                    u.Email
+                .Select(u => new SellerDto{
+                    Id = u.Id,
+                    Email = u.Email
                 }).ToList();
         }
     }

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CustomerManagement.Infrastructure;
+using CustomerManagement.Application.Contracts;
+using CustomerManagement.Application.Contracts.Dto;
 using CustomerManagement.Model;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace CustomerManagement.Controllers
@@ -13,18 +13,21 @@ namespace CustomerManagement.Controllers
     public class RegionsController : ControllerBase
     {
         private readonly ILogger<RegionsController> _logger;
-        private readonly CustomerManagementContext _context;
+        private readonly IRegionFacade _regionFacade;
 
-        public RegionsController(ILogger<RegionsController> logger, CustomerManagementContext context)
+        public RegionsController(
+            ILogger<RegionsController> logger,
+            IRegionFacade regionFacade
+            )
         {
             _logger = logger;
-            _context = context;
+            _regionFacade = regionFacade;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Region>>> Get()
+        public async Task<ActionResult<IEnumerable<RegionDto>>> Get()
         {
-            return await _context.Regions.ToListAsync();
+            return Ok(await _regionFacade.Get());
         }
     }
 }

@@ -3,10 +3,17 @@ using System.Collections.Generic;
 
 namespace CustomerManagement.Application.Contracts.Dto
 {
-    public class RegionDto
+    public sealed class RegionDto
     {
-        public Guid Id { get;  set; }
-        public string Name { get;  set; }
-        public virtual IEnumerable<CityDto> Cities { get;  set; }
+        public RegionDto(Guid id, string name, IEnumerable<CityDto> cities)
+        {
+            Id = id;
+            Name = name;
+            Cities = cities;
+
+        }
+        public Guid Id { get;   }
+        public string Name { get;   }
+        public IEnumerable<CityDto> Cities { get;  }
     }
 }

@@ -1,10 +1,13 @@
 using System;
-using CustomerManagement.Model;
+using System.Threading.Tasks;
+using CustomerManagement.Application.Contracts.Dto;
 
-namespace CustomerManagement.Application
+namespace CustomerManagement.Application.Contracts
 {
     public interface ISessionFacade
     {
-        Session GetSession(Guid sessionKey);
+        Task<SessionDto> GetSessionAsync(Guid sessionKey);
+        Task Save(SessionDto session);
+        Task Delete(SessionDto session);
     }
 }

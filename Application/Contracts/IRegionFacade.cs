@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CustomerManagement.Model;
+using CustomerManagement.Application.Contracts.Dto;
 
 namespace CustomerManagement.Application.Contracts
 {
     public interface IRegionFacade
     {
-        Task<IEnumerable<Region>> Get();
+        Task<IEnumerable<RegionDto>> Get();
     }
 }

@@ -1,6 +1,6 @@
 namespace DefaultNamespace
 {
-    public class ISessionRepository
+    public interface ISessionRepository
     {
         
     }

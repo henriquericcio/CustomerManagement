@@ -2,9 +2,14 @@ using System;
 
 namespace CustomerManagement.Application.Contracts.Dto
 {
-    public class SellerDto
+    public sealed class SellerDto
     {
-        public Guid Id{ get; set; }
-        public string Email { get; set; }
+        public SellerDto(Guid id, string email)
+        {
+            Id = id;
+            Email = email;
+        }
+        public Guid Id{ get; }
+        public string Email { get; }
     }
 }

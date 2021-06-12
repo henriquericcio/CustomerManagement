@@ -1,10 +1,8 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using CustomerManagement.Infrastructure;
-using CustomerManagement.Model;
+using CustomerManagement.Application.Contracts;
+using CustomerManagement.Application.Contracts.Dto;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace CustomerManagement.Controllers
@@ -14,38 +12,38 @@ namespace CustomerManagement.Controllers
     public class SessionsController : ControllerBase
     {
         private readonly ILogger<SessionsController> _logger;
-        private readonly CustomerManagementContext _context;
+        private readonly ISessionFacade _sessionFacade;
+        private readonly IUserFacade _userFacade;
 
-        public SessionsController(ILogger<SessionsController> logger, CustomerManagementContext context)
+        public SessionsController(ILogger<SessionsController> logger, ISessionFacade sessionFacade, IUserFacade userFacade)
         {
             _logger = logger;
-            _context = context;
+            _sessionFacade = sessionFacade;
+            _userFacade = userFacade;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<dynamic>> Get(Guid id)
         {
-            var session = await _context.Sessions.FindAsync(id);
+            var session = await  _sessionFacade.GetSessionAsync(id);
             if (session == null)
                 return NotFound();
-            
-            var user = _context.Users.FirstOrDefault(u => u.Email == session.Email);
+
+            var user = _userFacade.GetByEmail(session.Email);
             if (user == null)
                 return NotFound();
 
-            return new { session.Id, session.Email, Role = user.Role.ToString()};
+            return Ok(new SessionDto { Id = session.Id,Email = session.Email,Role = user.Role});
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Session session)
+        public async Task<IActionResult> Post(SessionDto session)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Email == session.Email && u.Password == session.Password);
+            var user = _userFacade.GetByEmailPassword(session.Email,session.Password);
             if(user == null)
                 return Unauthorized();
 
-            _context.Entry(session).State = EntityState.Added;
-            await _context.Sessions.AddAsync(session);
-            await _context.SaveChangesAsync();
+            await _sessionFacade.Save(session);
 
             return CreatedAtAction(nameof(Get), new { id = session.Id }, new { session.Id, session.Email, Role = user.Role.ToString()});
         }
@@ -54,12 +52,11 @@ namespace CustomerManagement.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var item = await _context.Sessions.FindAsync(id);
-            if (item == null)
+            var session =  _sessionFacade.GetSessionAsync(id);
+            if (session == null)
                 return NotFound();
 
-            _context.Sessions.Remove(item);
-            await _context.SaveChangesAsync();
+            await _sessionFacade.Delete(session);
 
             return NoContent();
         }

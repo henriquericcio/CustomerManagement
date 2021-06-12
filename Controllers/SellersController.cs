@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CustomerManagement.Application;
+using CustomerManagement.Application.Contracts;
 using CustomerManagement.Infrastructure;
 using CustomerManagement.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -15,23 +17,18 @@ namespace CustomerManagement.Controllers
     public class SellersController : ControllerBase
     {
         private readonly ILogger<SellersController> _logger;
-        private readonly CustomerManagementContext _context;
+        private readonly ISellerFacade _sellerFacade;
 
-        public SellersController(ILogger<SellersController> logger, CustomerManagementContext context)
+        public SellersController(ILogger<SellersController> logger, ISellerFacade sellerFacade)
         {
             _logger = logger;
-            _context = context;
+            _sellerFacade = sellerFacade;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<dynamic>>> Get()
         {
-            return await _context.Users
-                .Where(u=> u.Role == Role.Seller)
-                .Select(u => new {
-                    u.Id,
-                    u.Email
-                }).ToListAsync();
+            return Ok( await _sellerFacade.Get());
         }
     }
 }

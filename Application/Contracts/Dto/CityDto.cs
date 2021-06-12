@@ -2,9 +2,15 @@ using System;
 
 namespace CustomerManagement.Application.Contracts.Dto
 {
-    public class CityDto
+    public sealed class CityDto
     {
-        public Guid Id { get;  set; }
-        public string Name { get;  set; }
+        public CityDto(Guid id, string name)
+        {
+            Id = id;
+            Name = name;
+
+        }
+        public Guid Id { get;   }
+        public string Name { get;   }
     }
 }
